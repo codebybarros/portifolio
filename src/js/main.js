@@ -10,21 +10,18 @@ document.addEventListener('DOMContentLoaded', () => {
        ========================================================================== */
     const themeToggleBtn = document.getElementById('theme-toggle');
     const htmlElement = document.documentElement;
-    
-    // Verifica a preferência salva ou o padrão do sistema
+
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
         htmlElement.setAttribute('data-theme', savedTheme);
     }
 
-    // Função para alterar ícone baseado no tema (SVGs simples em string)
     const updateThemeIcon = (theme) => {
         const iconContainer = document.getElementById('theme-icon');
+
         if (theme === 'light') {
-            // Ícone de Lua (Para ativar modo escuro)
             iconContainer.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
         } else {
-            // Ícone de Sol (Para ativar modo claro)
             iconContainer.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
         }
     };
@@ -34,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggleBtn.addEventListener('click', () => {
         const currentTheme = htmlElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
+
         htmlElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         updateThemeIcon(newTheme);
@@ -51,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         navList.classList.toggle('active');
     });
 
-    // Fecha o menu ao clicar em um link
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
             navList.classList.remove('active');
@@ -59,10 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ==========================================================================
-       3. ANIMAÇÕES NO SCROLL (Intersection Observer)
+       3. ANIMAÇÕES NO SCROLL
        ========================================================================== */
     const observerOptions = {
-        threshold: 0.1, // Dispara quando 10% do elemento estiver visível
+        threshold: 0.1,
         rootMargin: "0px 0px -50px 0px"
     };
 
@@ -70,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target); // Para a animação após executar uma vez
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
@@ -80,14 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ==========================================================================
-       4. CARROSSEL DE PORTFÓLIO (Scroll Controlado por Botão)
+       4. CARROSSEL
        ========================================================================== */
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
     const carousel = document.getElementById('projects-carousel');
 
     if (carousel && prevBtn && nextBtn) {
-        const scrollAmount = 370; // Largura do card + gap aproximado
+        const scrollAmount = 370;
 
         nextBtn.addEventListener('click', () => {
             carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
@@ -99,13 +95,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================================================
-       5. VALIDAÇÃO DE FORMULÁRIO E MODAL CUSTOMIZADO
+       5. FORMULÁRIO + VALIDAÇÃO + MODAL
        ========================================================================== */
     const form = document.getElementById('contact-form');
     const modal = document.getElementById('success-modal');
     const closeModalBtn = document.getElementById('close-modal');
 
-    // Funções utilitárias de validação
+    // Estado inicial acessibilidade
+    modal.setAttribute('aria-hidden', 'true');
+
+    /* ---------- Funções utilitárias ---------- */
+
     const isEmailValid = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const setError = (input, message) => {
         const formControl = input.parentElement;
         formControl.classList.add('error');
+
         const errorMsg = formControl.querySelector('.error-msg');
         if (errorMsg) errorMsg.innerText = message;
     };
@@ -123,16 +124,35 @@ document.addEventListener('DOMContentLoaded', () => {
         formControl.classList.remove('error');
     };
 
+    /* ---------- Validação em tempo real ---------- */
+
+    const inputsRealtime = form.querySelectorAll('input, textarea');
+
+    inputsRealtime.forEach(input => {
+        input.addEventListener('input', () => {
+
+            if (input.value.trim() !== '') {
+                clearError(input);
+            }
+
+            if (input.type === 'email' && input.value.trim() !== '') {
+                if (!isEmailValid(input.value.trim())) {
+                    setError(input, 'E-mail inválido');
+                }
+            }
+        });
+    });
+
+    /* ---------- Submit ---------- */
+
     form.addEventListener('submit', (e) => {
-        e.preventDefault(); // Impede o recarregamento (Validação Native HTML ignorada)
-        
+        e.preventDefault();
+
         let isValid = true;
         const inputs = form.querySelectorAll('input, textarea');
 
-        // Resetar erros
         inputs.forEach(input => clearError(input));
 
-        // Validar campos
         const nome = document.getElementById('nome');
         if (nome.value.trim() === '') {
             setError(nome, 'Nome é obrigatório');
@@ -166,26 +186,31 @@ document.addEventListener('DOMContentLoaded', () => {
             isValid = false;
         }
 
-        // Se passar na validação, simula o envio
         if (isValid) {
-            // Aqui entraria a chamada para uma API (ex: EmailJS, Formspree)
-            
-            // Exibir modal de sucesso
             modal.classList.add('active');
-            form.reset(); // Limpa o formulário
+            modal.setAttribute('aria-hidden', 'false');
+            form.reset();
         }
     });
 
-    // Lógica para fechar o modal
+    /* ---------- Modal ---------- */
+
     const fecharModal = () => {
         modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
     };
 
     closeModalBtn.addEventListener('click', fecharModal);
-    
-    // Fechar modal clicando fora do conteúdo
+
     modal.addEventListener('click', (e) => {
         if (e.target === modal) fecharModal();
+    });
+
+    // ESC para fechar (UX profissional)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            fecharModal();
+        }
     });
 
 });

@@ -603,6 +603,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     box-shadow: 0 0 0 2px var(--color-primary-glow);
 }
 
+.input-group textarea {
+    resize: none;
+    min-height: 120px;
+}
+
+.input-group textarea:focus {
+    transform: scale(1.01);
+}
+
 /* Erros de Validação JS */
 .error-msg {
     display: none;
@@ -625,6 +634,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .submit-btn {
     margin-top: 1rem;
     align-self: flex-start;
+}
+
+.input-group.error input,
+.input-group.error textarea {
+    animation: shake 0.2s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
 }
 
 /* ==========================================================================
