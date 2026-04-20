@@ -132,6 +132,6 @@ cd portfolio
 
 ## 📞 Contato
 
-- [GitHub.com](https://github.com/codebybarros)
+- [GitHub.com](https://github.com/vitordsbarros)
 - [LinkedIn.com](https://www.linkedin.com/in/vitordsbarros)
 - [Instagram.com](https://www.instagram.com/codebybarros/)
