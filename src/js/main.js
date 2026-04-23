@@ -1,6 +1,5 @@
 /**
  * Portfólio - Script Principal
- * Lógica pura em Vanilla JS focado em performance e UX.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateThemeIcon = (theme) => {
         const iconContainer = document.getElementById('theme-icon');
-
         if (theme === 'light') {
             iconContainer.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
         } else {
@@ -44,67 +42,83 @@ document.addEventListener('DOMContentLoaded', () => {
     const navList = document.querySelector('.nav-list');
     const navLinks = document.querySelectorAll('.nav-link');
 
-    mobileBtn.addEventListener('click', () => {
-        navList.classList.toggle('active');
-    });
+    const toggleMenu = () => {
+        const isActive = navList.classList.toggle('active');
+        mobileBtn.classList.toggle('active');
+        mobileBtn.setAttribute('aria-expanded', isActive);
+    };
+
+    mobileBtn.addEventListener('click', toggleMenu);
 
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            navList.classList.remove('active');
-        });
-    });
-
-    /* ==========================================================================
-       3. ANIMAÇÕES NO SCROLL
-       ========================================================================== */
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-    };
-
-    const scrollObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
+            if (navList.classList.contains('active')) {
+                toggleMenu();
             }
         });
-    }, observerOptions);
-
-    document.querySelectorAll('.animate-on-scroll').forEach(section => {
-        scrollObserver.observe(section);
     });
 
     /* ==========================================================================
-       4. CARROSSEL
+       3. ANIMAÇÕES NO SCROLL (INTERSECTION OBSERVER)
+       ========================================================================== */
+    // Verifica se o usuário não ativou "reduzir movimento" no SO
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReducedMotion) {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const scrollObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(section => {
+            scrollObserver.observe(section);
+        });
+    } else {
+        // Para movimento mais reduzido, isso exibe tudo imediatamente
+        document.querySelectorAll('.animate-on-scroll').forEach(section => {
+            section.classList.add('is-visible');
+        });
+    }
+
+    /* ==========================================================================
+       4. CARROSSEL DE PORTFÓLIO
        ========================================================================== */
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
     const carousel = document.getElementById('projects-carousel');
 
     if (carousel && prevBtn && nextBtn) {
-        const scrollAmount = 370;
+        const getScrollAmount = () => {
+            const cardWidth = carousel.querySelector('.project-card').offsetWidth;
+            const gap = 32; // Equivalente a 2rem
+            return cardWidth + gap;
+        };
 
         nextBtn.addEventListener('click', () => {
-            carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
         });
 
         prevBtn.addEventListener('click', () => {
-            carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
         });
     }
 
     /* ==========================================================================
-       5. FORMULÁRIO + VALIDAÇÃO + MODAL
+       5. FORMULÁRIO E VALIDAÇÃO ACESSÍVEL
        ========================================================================== */
     const form = document.getElementById('contact-form');
     const modal = document.getElementById('success-modal');
     const closeModalBtn = document.getElementById('close-modal');
-
-    // Estado inicial acessibilidade
-    modal.setAttribute('aria-hidden', 'true');
-
-    /* ---------- Funções utilitárias ---------- */
+    let lastFocusedElement; // Para devolver o foco ao fechar o modal
 
     const isEmailValid = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -114,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const setError = (input, message) => {
         const formControl = input.parentElement;
         formControl.classList.add('error');
+        input.setAttribute('aria-invalid', 'true');
 
         const errorMsg = formControl.querySelector('.error-msg');
         if (errorMsg) errorMsg.innerText = message;
@@ -122,19 +137,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearError = (input) => {
         const formControl = input.parentElement;
         formControl.classList.remove('error');
+        input.removeAttribute('aria-invalid');
     };
 
-    /* ---------- Validação em tempo real ---------- */
-
+    // Validação em tempo real
     const inputsRealtime = form.querySelectorAll('input, textarea');
-
     inputsRealtime.forEach(input => {
         input.addEventListener('input', () => {
-
             if (input.value.trim() !== '') {
                 clearError(input);
             }
-
             if (input.type === 'email' && input.value.trim() !== '') {
                 if (!isEmailValid(input.value.trim())) {
                     setError(input, 'E-mail inválido');
@@ -143,61 +155,74 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    /* ---------- Submit ---------- */
-
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
         let isValid = true;
+        let firstInvalidInput = null;
         const inputs = form.querySelectorAll('input, textarea');
 
         inputs.forEach(input => clearError(input));
 
-        const nome = document.getElementById('nome');
-        if (nome.value.trim() === '') {
-            setError(nome, 'Nome é obrigatório');
-            isValid = false;
-        }
+        const fieldsToValidate = [
+            { id: 'nome', msg: 'Nome é obrigatório' },
+            { id: 'sobrenome', msg: 'Sobrenome é obrigatório' },
+            { id: 'assunto', msg: 'Assunto é obrigatório' },
+            { id: 'mensagem', msg: 'A mensagem não pode estar vazia' }
+        ];
 
-        const sobrenome = document.getElementById('sobrenome');
-        if (sobrenome.value.trim() === '') {
-            setError(sobrenome, 'Sobrenome é obrigatório');
-            isValid = false;
-        }
+        fieldsToValidate.forEach(field => {
+            const input = document.getElementById(field.id);
+            if (input.value.trim() === '') {
+                setError(input, field.msg);
+                isValid = false;
+                if (!firstInvalidInput) firstInvalidInput = input;
+            }
+        });
 
+        // Validação específica de email
         const email = document.getElementById('email');
         if (email.value.trim() === '') {
             setError(email, 'E-mail é obrigatório');
             isValid = false;
+            if (!firstInvalidInput) firstInvalidInput = email;
         } else if (!isEmailValid(email.value.trim())) {
             setError(email, 'Insira um e-mail válido');
             isValid = false;
-        }
-
-        const assunto = document.getElementById('assunto');
-        if (assunto.value.trim() === '') {
-            setError(assunto, 'Assunto é obrigatório');
-            isValid = false;
-        }
-
-        const mensagem = document.getElementById('mensagem');
-        if (mensagem.value.trim() === '') {
-            setError(mensagem, 'A mensagem não pode estar vazia');
-            isValid = false;
+            if (!firstInvalidInput) firstInvalidInput = email;
         }
 
         if (isValid) {
-            modal.classList.add('active');
-            modal.setAttribute('aria-hidden', 'false');
+            abrirModal();
             form.reset();
+        } else if (firstInvalidInput) {
+            // Acessibilidade: focar no primeiro campo com erro
+            firstInvalidInput.focus();
         }
     });
 
-    /* ---------- Modal ---------- */
+    /* ==========================================================================
+       6. CONTROLE DO MODAL
+       ========================================================================== */
+    const abrirModal = () => {
+        lastFocusedElement = document.activeElement; // Salva quem chamou o modal
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        
+        // Trap focus no modal após a animação
+        setTimeout(() => {
+            closeModalBtn.focus();
+        }, 100);
+    };
 
     const fecharModal = () => {
         modal.classList.remove('active');
         modal.setAttribute('aria-hidden', 'true');
+        
+        // Devolve o foco para quem abriu
+        if (lastFocusedElement) {
+            lastFocusedElement.focus();
+        }
     };
 
     closeModalBtn.addEventListener('click', fecharModal);
@@ -206,11 +231,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === modal) fecharModal();
     });
 
-    // ESC para fechar (UX profissional)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.classList.contains('active')) {
             fecharModal();
         }
     });
-
 });

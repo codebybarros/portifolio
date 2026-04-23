@@ -22,10 +22,10 @@
                 </ul>
             </nav>
             <button id="theme-toggle" class="theme-toggle" aria-label="Alternar Tema">
-                <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <svg id="theme-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             </button>
             
-            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir Menu">
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-expanded="false" aria-label="Abrir Menu">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -41,7 +41,7 @@
                     <h1 class="title">Vitor S. Barros</h1>
                     <h2 class="subtitle">Desenvolvedor <span class="neon-text">Backend</span></h2>
                     <p class="description">
-                        Desenvolvedor Backend construindo base sólida em APIs e arquitetura de sistemas
+                        Desenvolvedor Backend construindo base sólida em APIs e arquitetura de sistemas.
                     </p>
                     <div class="hero-buttons">
                         <a href="#portfolio" class="btn btn-primary">Ver Projetos</a>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="hero-visual">
                     <div class="glow-circle"></div>
-                    <img src="src/assets/images/profile.jpg" alt="Foto de Seu Nome" class="profile-img fallback-bg">
+                    <img src="src/assets/images/profile.jpg" alt="Foto de Vitor S. Barros" class="profile-img fallback-bg">
                 </div>
             </div>
         </section>
@@ -60,8 +60,7 @@
                 <h2 class="section-title">Sobre <span class="neon-text">Mim</span></h2>
                 <div class="about-grid">
                     <div class="about-text glass">
-                        <p>Sou desenvolvedor backend em formação, com foco na construção de APIs e no entendimento de como sistemas funcionam por trás das interfaces.
-                        Tenho interesse em evoluir na área de arquitetura, bancos de dados e desempenho, transformando teoria em prática através de projetos e estudos contínuos.</p>
+                        <p>Sou desenvolvedor backend em formação, com foco na construção de APIs e no entendimento de como sistemas funcionam por trás das interfaces. Tenho interesse em evoluir na área de arquitetura, bancos de dados e desempenho, transformando teoria em prática através de projetos e estudos contínuos.</p>
                         <p>Busco constantemente melhorar minha capacidade de escrever código limpo, estruturado e escalável, entendendo que a base sólida é o que sustenta sistemas.</p>
                         <a href="src/assets/pdf/Currículo - Vitor S. Barros.pdf" download class="btn btn-primary mt-4">Download Currículo (PDF)</a>
                     </div>
@@ -96,7 +95,7 @@
                     </div>
                 </div>
 
-                <div class="tech-slider mt-4">
+                <div class="tech-slider mt-4" aria-hidden="true">
                     <div class="tech-track">
                         <span class="tech-badge">JavaScript</span>
                         <span class="tech-badge">TypeScript</span>
@@ -108,7 +107,6 @@
                         <span class="tech-badge">Git</span>
                         <span class="tech-badge">GitHub</span>
                         <span class="tech-badge">Postman</span>
-                        
                         <span class="tech-badge">JavaScript</span>
                         <span class="tech-badge">TypeScript</span>
                         <span class="tech-badge">NodeJS</span>
@@ -129,56 +127,56 @@
                 <div class="portfolio-header">
                     <h2 class="section-title">Meus <span class="neon-text">Projetos</span></h2>
                     <div class="carousel-controls">
-                        <button class="control-btn glass" id="prev-btn" aria-label="Anterior">&larr;</button>
-                        <button class="control-btn glass" id="next-btn" aria-label="Próximo">&rarr;</button>
+                        <button class="control-btn glass" id="prev-btn" aria-label="Ver projetos anteriores" aria-controls="projects-carousel">&larr;</button>
+                        <button class="control-btn glass" id="next-btn" aria-label="Ver próximos projetos" aria-controls="projects-carousel">&rarr;</button>
                     </div>
                 </div>
 
-                <div class="carousel-container" id="projects-carousel">
+                <div class="carousel-container" id="projects-carousel" tabindex="0">
                     <div class="project-card glass">
                         <div class="project-img fallback-bg">
-                            <img src="src/assets/images/projeto1.png" alt="projeto1">
+                            <img src="src/assets/images/projeto1.png" alt="Interface no terminal da Calculadora Python" loading="lazy">
                         </div>
                         <div class="project-info">
                             <h3>Calculadora Python</h3>
-                            <p>Calculadora de terminal, onde pratiquei versionamento de codigo e conversão de tipos, simulando calculo basico com expressões no terminal.</p>
+                            <p>Calculadora de terminal, onde pratiquei versionamento de código e conversão de tipos, simulando cálculo básico com expressões no terminal.</p>
                             <div class="project-techs">
                                 <span>Python</span><span>VSCode</span><span>GitHub</span>
                             </div>
                             <div class="project-links">
-                                <a href="https://github.com/codebybarros/CalcTask" target="_blank" class="btn btn-outline">Repositório</a>
+                                <a href="https://github.com/codebybarros/CalcTask" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Repositório</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="project-card glass">
                         <div class="project-img fallback-bg">
-                            <img src="src/assets/images/projeto2.jpg" alt="projeto2">
+                            <img src="src/assets/images/projeto2.jpg" alt="Representação visual da API de Estoque" loading="lazy">
                         </div>
                         <div class="project-info">
-                            <h3>API de estoque</h3>
-                            <p>API de gerenciamento de estoque desenvolvida com Node.js e Express, focada em organização escalável e boas práticas de backend. Permite controle de produtos e movimentações de entrada e saída com estrutura modular e código limpo.</p>
+                            <h3>API de Estoque</h3>
+                            <p>API de gerenciamento de estoque desenvolvida com Node.js e Express, focada em organização escalável e boas práticas de backend.</p>
                             <div class="project-techs">
                                 <span>JavaScript</span><span>NodeJS</span><span>Express</span>
                             </div>
                             <div class="project-links">
-                                <a href="https://github.com/codebybarros/inventory-api" target="_blank" class="btn btn-outline">Repositório</a>
+                                <a href="https://github.com/codebybarros/inventory-api" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Repositório</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="project-card glass">
                         <div class="project-img fallback-bg">
-                            <img src="src/assets/images/projeto3.jpg" alt="projeto3">
+                            <img src="src/assets/images/projeto3.jpg" alt="Código de exercícios em Python" loading="lazy">
                         </div>
                         <div class="project-info">
-                            <h3>Exercicios em Python</h3>
-                            <p>Exercicios realizados em Python durante meu primeiro ano letivo da faculdade de Ciência da Computação.</p>
+                            <h3>Exercícios em Python</h3>
+                            <p>Exercícios realizados em Python durante meu primeiro ano letivo da faculdade de Ciência da Computação.</p>
                             <div class="project-techs">
                                 <span>Python</span><span>VSCode</span><span>GitHub</span>
                             </div>
                             <div class="project-links">
-                                <a href="https://github.com/codebybarros/Trabalhos-Python" target="_blank" class="btn btn-outline">Repositório</a>
+                                <a href="https://github.com/codebybarros/Trabalhos-Python" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Repositório</a>
                             </div>
                         </div>
                     </div>
@@ -194,29 +192,29 @@
                         <div class="form-row">
                             <div class="input-group">
                                 <label for="nome">Nome</label>
-                                <input type="text" id="nome" name="nome" placeholder="Seu nome">
-                                <span class="error-msg">Nome é obrigatório</span>
+                                <input type="text" id="nome" name="nome" placeholder="Seu nome" aria-describedby="nome-error" required>
+                                <span class="error-msg" id="nome-error" aria-live="polite">Nome é obrigatório</span>
                             </div>
                             <div class="input-group">
                                 <label for="sobrenome">Sobrenome</label>
-                                <input type="text" id="sobrenome" name="sobrenome" placeholder="Seu sobrenome">
-                                <span class="error-msg">Sobrenome é obrigatório</span>
+                                <input type="text" id="sobrenome" name="sobrenome" placeholder="Seu sobrenome" aria-describedby="sobrenome-error" required>
+                                <span class="error-msg" id="sobrenome-error" aria-live="polite">Sobrenome é obrigatório</span>
                             </div>
                         </div>
                         <div class="input-group">
                             <label for="email">E-mail profissional</label>
-                            <input type="email" id="email" name="email" placeholder="seu@email.com">
-                            <span class="error-msg">Insira um e-mail válido</span>
+                            <input type="email" id="email" name="email" placeholder="seu@email.com" aria-describedby="email-error" required>
+                            <span class="error-msg" id="email-error" aria-live="polite">Insira um e-mail válido</span>
                         </div>
                         <div class="input-group">
                             <label for="assunto">Assunto</label>
-                            <input type="text" id="assunto" name="assunto" placeholder="Proposta de projeto, vaga, etc.">
-                            <span class="error-msg">Assunto é obrigatório</span>
+                            <input type="text" id="assunto" name="assunto" placeholder="Proposta de projeto, vaga, etc." aria-describedby="assunto-error" required>
+                            <span class="error-msg" id="assunto-error" aria-live="polite">Assunto é obrigatório</span>
                         </div>
                         <div class="input-group">
                             <label for="mensagem">Mensagem</label>
-                            <textarea id="mensagem" name="mensagem" rows="5" placeholder="Como posso ajudar?" maxlength="500"></textarea>
-                            <span class="error-msg">A mensagem não pode estar vazia</span>
+                            <textarea id="mensagem" name="mensagem" rows="5" placeholder="Como posso ajudar?" maxlength="500" aria-describedby="mensagem-error" required></textarea>
+                            <span class="error-msg" id="mensagem-error" aria-live="polite">A mensagem não pode estar vazia</span>
                         </div>
                         <button type="submit" class="btn btn-primary submit-btn">Enviar Mensagem</button>
                     </form>
@@ -225,11 +223,11 @@
         </section>
     </main>
 
-    <div class="modal-overlay" id="success-modal">
+    <div class="modal-overlay" id="success-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="modal-content glass">
-            <button class="modal-close" id="close-modal">&times;</button>
-            <div class="modal-icon">✅</div>
-            <h3>Mensagem Enviada!</h3>
+            <button class="modal-close" id="close-modal" aria-label="Fechar modal">&times;</button>
+            <div class="modal-icon" aria-hidden="true">✅</div>
+            <h3 id="modal-title">Mensagem Enviada!</h3>
             <p>Obrigado pelo contato. Retornarei o mais breve possível.</p>
         </div>
     </div>
@@ -238,9 +236,9 @@
         <div class="container footer-container">
             <div class="footer-logo">Vitor <span>S.</span> Barros</div>
             <div class="footer-links">
-                <a href="https://github.com/codebybarros" target="_blank">GitHub</a>
-                <a href="https://www.linkedin.com/in/vitordsbarros" target="_blank">LinkedIn</a>
-                <a href="https://www.instagram.com/codebybarros/" target="_blank">Instagram</a>
+                <a href="https://github.com/vitordsbarros" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://www.linkedin.com/in/vitordsbarros" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://www.instagram.com/codebybarros/" target="_blank" rel="noopener noreferrer">Instagram</a>
             </div>
             <p class="copyright">&copy; 2026 Vitor S. Barros. Todos os direitos reservados.</p>
         </div>
