@@ -1,14 +1,14 @@
-# 💼 Portfólio Profissional - Desenvolvedor Backend
+# Portfólio Profissional - Desenvolvedor Backend
 
 Este é um portfólio pessoal desenvolvido com foco em apresentação profissional, design sofisticado e alta performance, utilizando apenas tecnologias web nativas.
 
-## 🚀 Objetivo
+## Objetivo
 
 Criar uma interface moderna, responsiva e visualmente impactante para apresentar projetos, habilidades e informações profissionais de forma clara e atrativa, sem uso de frameworks.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - HTML5 (semântico)
 - CSS3 (com variáveis, animações e responsividade)
@@ -16,7 +16,7 @@ Criar uma interface moderna, responsiva e visualmente impactante para apresentar
 
 ---
 
-## 🎨 Características do Projeto
+## Características do Projeto
 
 - Design moderno e sofisticado
 - Tema escuro e claro com alternância dinâmica
@@ -27,7 +27,7 @@ Criar uma interface moderna, responsiva e visualmente impactante para apresentar
 
 ---
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 portfolio/
@@ -55,33 +55,33 @@ portfolio/
 
 ---
 
-## 📌 Seções do Portfólio
+## Seções do Portfólio
 
-### 🏠 Home
+### Home
 - Apresentação inicial com destaque profissional
 - Animações de entrada
 
-### 👤 Sobre Mim
+### Sobre Mim
 - Informações pessoais e profissionais
 - Imagem dinâmica
 - Botão para download de currículo (PDF)
 
-### 🎓 Formação
+### Formação
 - Histórico acadêmico e profissional
 - Carrossel contínuo de tecnologias
 
-### 💻 Portfólio
+### Portfólio
 - Exibição de projetos em formato de cards
 - Carrossel interativo
 - Links para repositórios e demos
 
-### 📬 Contato
+### Contato
 - Formulário com validação via JavaScript
 - Simulação de envio com modal de confirmação
 
 ---
 
-## ⚙️ Funcionalidades
+## Funcionalidades
 
 - Alternância de tema (dark/light)
 - Scroll suave customizado
@@ -92,7 +92,7 @@ portfolio/
 
 ---
 
-## 📱 Responsividade
+## Responsividade
 
 O projeto foi desenvolvido com abordagem responsiva, garantindo adaptação para:
 
@@ -103,7 +103,7 @@ O projeto foi desenvolvido com abordagem responsiva, garantindo adaptação para
 
 ---
 
-## 📈 Boas Práticas Aplicadas
+## Boas Práticas Aplicadas
 
 - HTML semântico
 - Código comentado
@@ -114,7 +114,7 @@ O projeto foi desenvolvido com abordagem responsiva, garantindo adaptação para
 
 ---
 
-## 🔧 Como Usar
+## Como Usar
 
 1. Clone o repositório:
 ``` bash
@@ -130,8 +130,8 @@ cd portfolio
 
 ---
 
-## 📞 Contato
+## Contato
 
-- [GitHub.com](https://github.com/codebybarros)
+- [GitHub.com](https://github.com/vitordsbarros)
 - [LinkedIn.com](https://www.linkedin.com/in/vitordsbarros)
 - [Instagram.com](https://www.instagram.com/codebybarros/)
