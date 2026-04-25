@@ -1,37 +1,45 @@
 /**
  * Portfólio - Script Principal
+ * O DOMContentLoaded garante que o JavaScript só seja executado
+ * após todo o HTML da página estar carregado. Isso evita erros ao 
+ * tentar manipular elementos que ainda não foram renderizados.
  */
-
 document.addEventListener('DOMContentLoaded', () => {
 
     /* ==========================================================================
        1. ALTERNÂNCIA DE TEMA (DARK/LIGHT)
        ========================================================================== */
     const themeToggleBtn = document.getElementById('theme-toggle');
-    const htmlElement = document.documentElement;
+    const htmlElement = document.documentElement; // Pega a tag <html>
 
+    // Verifica se há um tema salvo previamente no navegador
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
         htmlElement.setAttribute('data-theme', savedTheme);
     }
 
+    // Função para atualizar o ícone dependendo do tema ativo
+    // O SVG foi inserido diretamente para evitar dependências externas
     const updateThemeIcon = (theme) => {
         const iconContainer = document.getElementById('theme-icon');
         if (theme === 'light') {
+            // Ícone de Lua
             iconContainer.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
         } else {
+            // Ícone de Sol
             iconContainer.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
         }
     };
 
     updateThemeIcon(htmlElement.getAttribute('data-theme'));
 
+    // Alterna o tema ao clicar no botão
     themeToggleBtn.addEventListener('click', () => {
         const currentTheme = htmlElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark'; // Operador ternário para a troca
 
         htmlElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        localStorage.setItem('theme', newTheme); // Salva a escolha do usuário
         updateThemeIcon(newTheme);
     });
 
@@ -43,13 +51,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-link');
 
     const toggleMenu = () => {
+        // O toggle adiciona a classe se não existir, ou remove se já estiver presente
         const isActive = navList.classList.toggle('active');
         mobileBtn.classList.toggle('active');
+        
+        // Atualiza a acessibilidade para leitores de tela
         mobileBtn.setAttribute('aria-expanded', isActive);
     };
 
     mobileBtn.addEventListener('click', toggleMenu);
 
+    // Fecha o menu mobile automaticamente ao clicar em um link
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
             if (navList.classList.contains('active')) {
@@ -61,20 +73,23 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ==========================================================================
        3. ANIMAÇÕES NO SCROLL (INTERSECTION OBSERVER)
        ========================================================================== */
-    // Verifica se o usuário não ativou "reduzir movimento" no SO
+    // Utilizando IntersectionObserver no lugar do evento de scroll nativo
+    // para melhorar a performance da página.
+
+    // Verifica configurações de acessibilidade do SO (movimento reduzido)
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (!prefersReducedMotion) {
         const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
+            threshold: 0.1, // Dispara quando 10% do elemento estiver visível
+            rootMargin: "0px 0px -50px 0px" // Margem de antecipação
         };
 
         const scrollObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
+                    entry.target.classList.add('is-visible'); 
+                    observer.unobserve(entry.target); // Remove o observador após a animação
                 }
             });
         }, observerOptions);
@@ -83,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             scrollObserver.observe(section);
         });
     } else {
-        // Para movimento mais reduzido, isso exibe tudo imediatamente
+        // Exibe os elementos diretamente se o movimento reduzido estiver ativo
         document.querySelectorAll('.animate-on-scroll').forEach(section => {
             section.classList.add('is-visible');
         });
@@ -97,9 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const carousel = document.getElementById('projects-carousel');
 
     if (carousel && prevBtn && nextBtn) {
+        // Calcula a largura do scroll baseada no tamanho atual do card
         const getScrollAmount = () => {
             const cardWidth = carousel.querySelector('.project-card').offsetWidth;
-            const gap = 32; // Equivalente a 2rem
+            const gap = 32; 
             return cardWidth + gap;
         };
 
@@ -113,22 +129,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================================================
-       5. FORMULÁRIO E VALIDAÇÃO ACESSÍVEL
+       5. FORMULÁRIO E VALIDAÇÃO
        ========================================================================== */
     const form = document.getElementById('contact-form');
     const modal = document.getElementById('success-modal');
     const closeModalBtn = document.getElementById('close-modal');
-    let lastFocusedElement; // Para devolver o foco ao fechar o modal
+    let lastFocusedElement; 
 
+    // Validação de formato de e-mail usando Regex
     const isEmailValid = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
     };
 
+    // Funções auxiliares para manipular mensagens de erro no DOM
     const setError = (input, message) => {
         const formControl = input.parentElement;
         formControl.classList.add('error');
-        input.setAttribute('aria-invalid', 'true');
+        input.setAttribute('aria-invalid', 'true'); 
 
         const errorMsg = formControl.querySelector('.error-msg');
         if (errorMsg) errorMsg.innerText = message;
@@ -140,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         input.removeAttribute('aria-invalid');
     };
 
-    // Validação em tempo real
+    // Remove o aviso de erro em tempo real enquanto o usuário digita
     const inputsRealtime = form.querySelectorAll('input, textarea');
     inputsRealtime.forEach(input => {
         input.addEventListener('input', () => {
@@ -155,13 +173,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Validação principal no envio do formulário
     form.addEventListener('submit', (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Impede o recarregamento da página
 
         let isValid = true;
-        let firstInvalidInput = null;
+        let firstInvalidInput = null; 
         const inputs = form.querySelectorAll('input, textarea');
 
+        // Reseta os erros antes da nova validação
         inputs.forEach(input => clearError(input));
 
         const fieldsToValidate = [
@@ -173,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fieldsToValidate.forEach(field => {
             const input = document.getElementById(field.id);
+            // .trim() evita validação de campos preenchidos apenas com espaços
             if (input.value.trim() === '') {
                 setError(input, field.msg);
                 isValid = false;
@@ -180,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Validação específica de email
+        // Lógica de validação separada para o e-mail
         const email = document.getElementById('email');
         if (email.value.trim() === '') {
             setError(email, 'E-mail é obrigatório');
@@ -194,10 +215,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isValid) {
             abrirModal();
-            form.reset();
+            form.reset(); 
         } else if (firstInvalidInput) {
-            // Acessibilidade: focar no primeiro campo com erro
-            firstInvalidInput.focus();
+            firstInvalidInput.focus(); // Direciona o usuário para o primeiro erro
         }
     });
 
@@ -205,11 +225,11 @@ document.addEventListener('DOMContentLoaded', () => {
        6. CONTROLE DO MODAL
        ========================================================================== */
     const abrirModal = () => {
-        lastFocusedElement = document.activeElement; // Salva quem chamou o modal
+        lastFocusedElement = document.activeElement; // Guarda a referência de foco
         modal.classList.add('active');
         modal.setAttribute('aria-hidden', 'false');
         
-        // Trap focus no modal após a animação
+        // Direciona o foco para dentro do modal (Acessibilidade)
         setTimeout(() => {
             closeModalBtn.focus();
         }, 100);
@@ -219,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('active');
         modal.setAttribute('aria-hidden', 'true');
         
-        // Devolve o foco para quem abriu
+        // Retorna o foco ao elemento original
         if (lastFocusedElement) {
             lastFocusedElement.focus();
         }
@@ -227,10 +247,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     closeModalBtn.addEventListener('click', fecharModal);
 
+    // Fecha o modal ao clicar fora da área central
     modal.addEventListener('click', (e) => {
         if (e.target === modal) fecharModal();
     });
 
+    // Suporte a fechamento pelo teclado (Esc)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.classList.contains('active')) {
             fecharModal();
